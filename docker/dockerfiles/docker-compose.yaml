@@ -260,8 +260,16 @@ services:
 
         # Command to execute
         # Can use shell-style or list-style syntax.
+        # Normal entry point:
         command: ["crate_launch_cherrypy_server ${CRATE_DOCKER_CRATE_CHERRYPY_ARGS}"]
 
+        # Debugging entry point:
+        # command: ["tail", "-f", "/dev/null"]
+
+        # then:
+        # docker compose exec -it crate_server /bin/bash
+        # or (root):
+        # docker compose exec -it -u 0 crate_server /bin/bash
 
     # -------------------------------------------------------------------------
     # CRATE background monitor, using Flower
