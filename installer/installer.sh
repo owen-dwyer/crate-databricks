@@ -98,6 +98,11 @@ INSTALLER_ARGS+=(${COMMAND})
 # Directories
 # -----------------------------------------------------------------------------
 CRATE_INSTALLER_VENV=${HOME}/.virtualenvs/crate-installer
+ACTIVATE=${CRATE_INSTALLER_VENV}/bin/activate
+
+if [ ! -f ${ACTIVATE} ]; then
+    RECREATE_VIRTUALENV=1
+fi
 
 if [ ${PRODUCTION} -eq 1 ]; then
     CRATE_SRC_DIR=${HOME}/crate/src
@@ -150,7 +155,7 @@ if [ ! -d "${CRATE_INSTALLER_VENV}" ]; then
 fi
 
 # Activate virtual environment
-source "${CRATE_INSTALLER_VENV}/bin/activate"
+source "${ACTIVATE}"
 
 # Check virtual environment
 PYTHON_VERSION_OK=$(python -c 'import sys; print(sys.version_info.major >=3 and sys.version_info.minor >= 7)')
