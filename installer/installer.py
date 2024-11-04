@@ -3,6 +3,8 @@
 """
 installer/installer.py
 
+TEMP
+
 ===============================================================================
 
     Copyright (C) 2015, University of Cambridge, Department of Psychiatry.
