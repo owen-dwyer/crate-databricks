@@ -93,7 +93,8 @@ from semantic_version import Version
 # =============================================================================
 
 MINIMUM_DOCKER_COMPOSE_VERSION = Version("2.0.0")
-EXIT_FAILURE = 1
+EXIT_FAILURE = 1  # Unexpected error
+EXIT_USER = 2  # User error e.g. bad command, misconfiguration, CTRL-C
 
 
 class HostPath:
@@ -413,7 +414,7 @@ class Installer:
                 "variable CRATE_INSTALLER_CRATE_ROOT_HOST_DIR"
             )
 
-            sys.exit(EXIT_FAILURE)
+            sys.exit(EXIT_USER)
 
         self.title = "CRATE Setup"
         self.choice_style = self.get_choice_style()
@@ -740,7 +741,8 @@ class Installer:
         # virtualenv or call /bin/bash.
         # "Run" here means "without a terminal".
         if not crate_command:
-            sys.exit("Error: no command specified")
+            self.error("Error: no command specified")
+            sys.exit(EXIT_USER)
         os.chdir(self.dockerfiles_host_dir())
 
         return self.docker.compose.run(
@@ -813,7 +815,7 @@ class Installer:
 
     def fail(self, text: str) -> NoReturn:
         self.error(text)
-        sys.exit(EXIT_FAILURE)
+        sys.exit(EXIT_USER)
 
     def dump_colours(self) -> None:
         # Development only
@@ -918,7 +920,7 @@ class Installer:
     def abort_installation(self) -> None:
         self.error("Installation aborted")
         self.write_environment_variables()
-        sys.exit(EXIT_FAILURE)
+        sys.exit(EXIT_USER)
 
     def configure_user(self) -> None:
         self.setenv(
@@ -2077,14 +2079,21 @@ def get_installer_class() -> Type[Installer]:
         return MacOsInstaller
 
     if sys_info.system == "Windows":
-        sys.exit(
+        print(
             "The installer cannot be run under native Windows. Please "
             "install Windows Subsystem for Linux 2 (WSL2) and run the "
             "installer from there. Alternatively follow the instructions "
-            "to install CRATE manually."
+            "to install CRATE manually.",
+            file=sys.stderr,
         )
+        sys.exit(EXIT_USER)
 
-    sys.exit(f"Sorry, the installer can't be run under {sys_info.system}.")
+    print(
+        f"Sorry, the installer can't be run under {sys_info.system}.",
+        file=sys.stderr,
+    )
+
+    sys.exit(EXIT_USER)
 
 
 # =============================================================================
