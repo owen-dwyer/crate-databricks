@@ -721,9 +721,16 @@ class Installer:
     def run_crate_command_and_output_to_file(
         self, crate_command: List[str], filename: str
     ) -> None:
-        stdout = self.run_crate_command(crate_command)
-        with open(filename, "w") as f:
-            f.write(stdout)
+        with open(filename, "wb") as f:
+            output_generator = self.run_crate_command(
+                crate_command, stream=True
+            )
+            for stream_type, stream_content in output_generator:
+                if stream_type == "stdout":
+                    f.write(stream_content)
+                elif stream_type == "stderr":
+                    decoded = stream_content.decode("utf-8")
+                    print(decoded, file=sys.stderr, end="")
 
     def run_crate_command(
         self,
