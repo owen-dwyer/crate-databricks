@@ -115,13 +115,13 @@ class PatientInfo(SecretBase):
         PatientInfoConstants.RID_FIELDNAME,
         config.sqltype_encrypted_pid,
         nullable=False,
-        unique=True,
+        # unique=True,
         comment="Research ID (RID)",
     )
     trid = Column(
         PatientInfoConstants.TRID_FIELDNAME,
         TridType,
-        unique=True,
+        # unique=True,
         comment="Transient integer research ID (TRID)",
     )
     mpid = Column(
@@ -226,7 +226,7 @@ class TridRecord(SecretBase):
         "trid",
         TridType,
         nullable=False,
-        unique=True,
+        # unique=True,
         comment="Transient integer research ID (TRID)",
     )
 
