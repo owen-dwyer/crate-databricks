@@ -1536,7 +1536,8 @@ def patient_processing_fn(
         # Gather scrubbing information for a patient. (Will save.)
         try:
             patient = Patient(pid)
-        except DatabaseError:
+        except DatabaseError as e:
+            print('---->',e)
             log.warning(
                 f"Skipping patient with PID={pid} because the record could "
                 "not be saved to the secret_map table"
