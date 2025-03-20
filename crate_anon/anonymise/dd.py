@@ -429,8 +429,7 @@ class DataDictionary:
             # Scan each table
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
-            print(sorted(set(ReflectedColumnInfo(c).datatype_sqltext for t in meta.sorted_tables for c in t.columns)));
-            exit(1)
+            # print(sorted(set(ReflectedColumnInfo(c).datatype_sqltext for t in meta.sorted_tables for c in t.columns)));
 
             for t in meta.sorted_tables:
                 tablename = t.name
