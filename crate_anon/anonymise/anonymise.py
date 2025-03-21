@@ -1537,10 +1537,12 @@ def patient_processing_fn(
         try:
             patient = Patient(pid)
         except DatabaseError as e:
-            print('---->',e)
             log.warning(
                 f"Skipping patient with PID={pid} because the record could "
                 "not be saved to the secret_map table"
+            )
+            log.warning(
+                f"--> Error: {e}"
             )
             adminsession = config.admindb.session
             adminsession.rollback()
